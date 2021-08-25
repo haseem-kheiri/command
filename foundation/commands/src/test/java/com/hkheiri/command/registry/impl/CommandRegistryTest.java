@@ -40,8 +40,7 @@ public class CommandRegistryTest {
     registry.register(command);
   }
 
-  @Test(dependsOnMethods = "testRegister", expectedExceptions = IllegalArgumentException.class,
-      expectedExceptionsMessageRegExp = "Command with route 'hkheiri.com/test1' already registered.")
+  @Test(dependsOnMethods = "testRegister", expectedExceptions = IllegalArgumentException.class)
   public void testRegisterDuplicate() {
     TestCommand1 command = new TestCommand1();
     registry.register(command);
@@ -50,15 +49,13 @@ public class CommandRegistryTest {
 
   @Test(dependsOnMethods = "testRegister")
   public void testGet() throws IOException {
-    ICommandResponse response =
-        registry.get("hkheiri.com/test1").addParam("name", "Haseem").run();
+    ICommandResponse response = registry.get("hkheiri.com/test1").addParam("name", "Haseem").run();
 
     Assert.assertNotNull(response);
     String actual = response.get(new TypeReference<String>() {});
     Assert.assertEquals(actual, "Hello Haseem");
-    
-    response =
-        registry.get("hkheiri.com/test2").addParam("a", 1).addParam("b", 1).run();
+
+    response = registry.get("hkheiri.com/test2").addParam("a", 1).addParam("b", 1).run();
     Integer n = response.get(new TypeReference<Integer>() {});
     Assert.assertEquals(n.intValue(), 2);
   }
@@ -74,6 +71,6 @@ class TestCommand1 {
 
   @CommandRoute("hkheiri.com/test2")
   public int test2(@CommandParam("a") int a, @CommandParam("b") int b) {
-    return a+b;
+    return a + b;
   }
 }
