@@ -1,0 +1,127 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <parent>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-dependencies</artifactId>
+      <version>2.2.5.RELEASE</version>
+   </parent>
+
+   <groupId>com.hkheiri</groupId>
+   <artifactId>foundation</artifactId>
+   <version>0.0.1-SNAPSHOT</version>
+   <packaging>pom</packaging>
+
+   <properties>
+      <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+      <java.version>13</java.version>
+      <resource.delimiter>@</resource.delimiter>
+      <maven.compiler.source>${java.version}</maven.compiler.source>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <maven.compiler.target>${java.version}</maven.compiler.target>
+      <testng.version>7.1.0</testng.version>
+      <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
+      <maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
+   </properties>
+
+   <build>
+      <pluginManagement>
+         <plugins>
+
+            <plugin>
+               <groupId>org.jacoco</groupId>
+               <artifactId>jacoco-maven-plugin</artifactId>
+               <version>${jacoco-maven-plugin.version}</version>
+            </plugin>
+
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-checkstyle-plugin</artifactId>
+               <version>${maven-checkstyle-plugin.version}</version>
+               <configuration>
+                  <configLocation>google_checks.xml</configLocation>
+                  <encoding>UTF-8</encoding>
+                  <logViolationsToConsole>true</logViolationsToConsole>
+                  <failOnViolation>false</failOnViolation>
+                  <linkXRef>false</linkXRef>
+               </configuration>
+               <executions>
+                  <execution>
+                     <goals>
+                        <goal>check</goal>
+                     </goals>
+                  </execution>
+               </executions>
+            </plugin>
+         </plugins>
+      </pluginManagement>
+
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+         </plugin>
+         <!-- jacoco -->
+         <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <executions>
+               <execution>
+                  <goals>
+                     <goal>prepare-agent</goal>
+                  </goals>
+               </execution>
+               <execution>
+                  <id>report</id>
+                  <phase>test</phase>
+                  <goals>
+                     <goal>report</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+
+         <!-- source -->
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>attach-sources</id>
+                  <goals>
+                     <goal>jar</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+      </plugins>
+   </build>
+
+   <dependencyManagement>
+      <dependencies>
+         <!-- test dependencies -->
+         <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+            <scope>test</scope>
+         </dependency>
+      </dependencies>
+   </dependencyManagement>
+
+   <dependencies>
+      <dependency>
+         <groupId>org.slf4j</groupId>
+         <artifactId>slf4j-api</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.testng</groupId>
+         <artifactId>testng</artifactId>
+      </dependency>
+   </dependencies>
+
+   <modules>
+      <module>commands</module>
+   </modules>
+</project>
