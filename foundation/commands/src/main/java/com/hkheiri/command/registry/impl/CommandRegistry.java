@@ -7,6 +7,11 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 
 /**
  * Registry for commands.
@@ -14,12 +19,26 @@ import org.apache.commons.lang3.StringUtils;
  * @author Haseem Kheiri
  *
  */
-public class CommandRegistry {
+
+public class CommandRegistry implements ApplicationContextAware {
   private final Map<String, CommandCall> commands = new TreeMap<>();
   private ObjectMapper objectMapper;
+  private ApplicationContext applicationContext;
+
 
   public void setObjectMapper(ObjectMapper objectMapper) {
     this.objectMapper = objectMapper;
+  }
+
+  @Override
+  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    this.applicationContext = applicationContext;
+  }
+
+  @EventListener(classes = ContextRefreshedEvent.class)
+  public void handleEvent(ContextRefreshedEvent e) {
+    Map<String, Object> beans = applicationContext.getBeansWithAnnotation(CommandController.class);
+    beans.values().stream().forEach(b -> register(b));
   }
 
   /**
